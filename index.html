@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peace SMP – Peaceful Minecraft Survival</title>
+<meta name="description" content="Peace SMP: a semi-vanilla, pay-to-win-free Minecraft survival server with a peaceful community and no map resets.">
+<link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
+<nav><a href="#home">Home</a><a href="#join">Join</a><a href="#about">About</a><a href="#gallery">Gallery</a><a href="#staff">Staff</a></nav>
+
+<section class="hero" id="home">
+<img src="logo.png" alt="Peace SMP logo">
+<p class="tag">Survive peacefully. Build freely. Never reset.</p>
+<a class="btn" href="#join">Join the Server</a>
+</section>
+
+<section id="join" style="padding-top:20px">
+<h2>Join Peace SMP</h2><p class="sub">Works for both Java and Bedrock. If the main address is down, use the backup.</p>
+<div class="cards">
+<div class="card"><h3>Java – Main</h3><div class="ip"><code>play.mcpeace.fun</code><button class="cp" data-c="play.mcpeace.fun">Copy</button></div></div>
+<div class="card"><h3>Bedrock – Main</h3><div class="ip"><code>play.mcpeace.fun</code><button class="cp" data-c="play.mcpeace.fun">Copy</button></div><div class="ip"><span class="port">Port: <b>25668</b></span><button class="cp" data-c="25668">Copy</button></div></div>
+<div class="card"><h3>Java – Backup</h3><div class="ip"><code>node-2.banglaverse.net:25668</code><button class="cp" data-c="node-2.banglaverse.net:25668">Copy</button></div></div>
+<div class="card"><h3>Bedrock – Backup</h3><div class="ip"><code>node-2.banglaverse.net</code><button class="cp" data-c="node-2.banglaverse.net">Copy</button></div><div class="ip"><span class="port">Port: <b>25668</b></span><button class="cp" data-c="25668">Copy</button></div></div>
+</div></section>
+
+<section id="about">
+<h2>About Peace SMP</h2>
+<p class="sub">Peace SMP was created to escape the pay-to-win culture that dominates most Minecraft survival servers. Here, everyone starts equal and plays the game the way it was meant to be played.</p>
+<div class="cards">
+<div class="card"><div class="feat">🌿</div><h3>Semi-Vanilla</h3>Classic survival with a light touch. Exciting improvements are on the way.</div>
+<div class="card"><div class="feat">🕊️</div><h3>Peaceful Community</h3>A friendly, welcoming player base that values respect and cooperation.</div>
+<div class="card"><div class="feat">🗺️</div><h3>No Map Resets</h3>Your builds are permanent. We never reset the map, so your legacy lasts.</div>
+<div class="card"><div class="feat">🚫</div><h3>No Pay-to-Win</h3>No paid advantages. Progress is earned through play, not purchases.</div>
+</div></section>
+
+<section id="gallery">
+<h2>Community Gallery</h2>
+<p class="sub">Hop in, play, and build something super duper cool. Then show it off! Upload screenshots of your best builds, farms and adventures for everyone to see.</p>
+<div class="center"><button class="btn" id="upBtn">📸 Upload Your Picture</button></div>
+<div class="grid" id="grid"><div class="empty">Loading gallery…</div></div>
+<div class="center"><button class="btn ghost" id="rmBtn">🛠 Admin: Remove Photos</button></div>
+</section>
+
+<section id="staff">
+<h2>Our Staff</h2><p class="sub">The people keeping Peace SMP calm and running smoothly.</p>
+<div class="staff">
+<div class="card"><div class="av">👑</div><div class="role">President</div><div class="name">X_Sylus_X</div></div>
+<div class="card"><div class="av">🛡️</div><div class="role">Minister</div><div class="name">NahianSAM</div></div>
+</div></section>
+
+<footer>© Peace SMP · play.mcpeace.fun · Not affiliated with Mojang or Microsoft.</footer>
+
+<div class="modal" id="mCode"><div class="box"><h3 id="cT"></h3><p id="cP"></p><input type="password" id="code" placeholder="Code" autocomplete="off"><div class="err" id="cE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="cOk">Continue</button></div></div></div>
+<div class="modal" id="mUp"><div class="box"><h3>Upload picture</h3><p>Enter your Minecraft username and choose your image.</p><input type="text" id="uname" maxlength="16" placeholder="Minecraft username"><input type="file" id="file" accept="image/*"><div class="err" id="uE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="uOk">Upload</button></div></div></div>
+<div class="modal" id="big"><img id="bigImg" alt=""></div>
+<div id="toast"></div>
+<script src="script.js"></script>
+</body></html>
