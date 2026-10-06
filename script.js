@@ -33,8 +33,8 @@ $('#code').onkeydown = e => { if (e.key === 'Enter') submitCode(); };
 
 $('#upBtn').onclick = () => ask('upload', 'Gallery permission', 'Enter the gallery permission code to upload.', () => { $('#uE').textContent = ''; open('#mUp'); });
 $('#rmBtn').onclick = () => {
-  if (rm) { rm = false; $('#rmBtn').textContent = '🛠 Admin: Remove Photos'; render(); return; }
-  ask('admin', 'Admin access', 'Enter the admin password to remove photos.', () => { rm = true; $('#rmBtn').textContent = '✅ Done removing'; render(); toast('Removal mode on'); });
+  if (rm) { rm = false; $('#rmBtn').textContent = 'Admin: Remove Photos'; render(); return; }
+  ask('admin', 'Admin access', 'Enter the admin password to remove photos.', () => { rm = true; $('#rmBtn').textContent = 'Done removing'; render(); toast('Removal mode on'); });
 };
 
 function render() {
