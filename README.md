@@ -13,3 +13,5 @@ Gallery pictures are committed to the repo's `gallery/` folder through the GitHu
 5. Deploy. Every upload/removal makes a commit, which also triggers a redeploy (that's normal).
 
 Never commit the token or hashes. PINs are checked only on the server, so they can't be found by inspecting the page.
+## Credit
+Rafi (Meshur Abba)
