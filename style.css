@@ -45,4 +45,7 @@ input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);ba
 .badge{display:inline-block;background:var(--acc);color:#0b1a0b;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
 textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-bottom:12px;resize:vertical;min-height:80px}
 .pic .note{color:var(--ink);white-space:pre-wrap;padding-top:0}.pic .when{color:var(--mut);font-size:12px;padding-top:0}
-
+.events-list{grid-template-columns:1fr;max-width:760px;margin:26px auto}
+.events-list .pic img{aspect-ratio:auto;max-height:640px;object-fit:contain;background:#000}
+.events-list .pic p{font-size:16px;padding:12px 18px}
+.events-list .pic .note{font-size:17px}
