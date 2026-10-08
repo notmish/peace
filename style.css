@@ -39,10 +39,6 @@ input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);ba
 .hero-btns{display:flex;flex-direction:column;align-items:center;gap:12px}
 .btn.discord{background:#5865F2;color:#fff}
 .card.wide{grid-column:1/-1}
-.event-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;max-width:760px;margin:auto}
-.event-card img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
-.event-info{padding:20px;text-align:center}.event-info h3{margin:8px 0 6px;font-size:24px}.event-info p{margin:0 0 16px;color:var(--mut)}
-.badge{display:inline-block;background:var(--acc);color:#0b1a0b;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
 textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-bottom:12px;resize:vertical;min-height:80px}
 .pic .note{color:var(--ink);white-space:pre-wrap;padding-top:0}.pic .when{color:var(--mut);font-size:12px;padding-top:0}
 .events-list{grid-template-columns:1fr;max-width:760px;margin:26px auto}
