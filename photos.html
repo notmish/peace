@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f1a12">
+<meta name="color-scheme" content="dark">
+<title>Photo Gallery – Peace SMP</title>
+<link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
+<nav><a href="/">← Back to Home</a><a href="photos.html">Photos</a><a href="videos.html">Videos</a></nav>
+<section>
+<h2>Photo Gallery</h2>
+<p class="sub">Hop in, play, and build something super duper cool. Then show it off! Upload screenshots of your best builds, farms and adventures for everyone to see.</p>
+<div class="center"><button class="btn" id="upBtn">📸 Upload Your Picture</button></div>
+<div class="grid" id="grid"><div class="empty">Loading gallery…</div></div>
+<div class="center"><button class="btn ghost" id="rmBtn">🛠 Admin: Remove Photos</button></div>
+</section>
+<footer>© Peace SMP · play.mcpeace.fun</footer>
+<div class="modal" id="mCode"><div class="box"><h3 id="cT"></h3><p id="cP"></p><input type="password" id="code" placeholder="Code" autocomplete="off"><div class="err" id="cE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="cOk">Continue</button></div></div></div>
+<div class="modal" id="mUp"><div class="box"><h3>Upload picture</h3><p>Enter your Minecraft username and choose your image.</p><input type="text" id="uname" maxlength="16" placeholder="Minecraft username"><input type="file" id="file" accept="image/*"><div class="err" id="uE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="uOk">Upload</button></div></div></div>
+<div class="modal" id="big"><img id="bigImg" alt=""></div>
+<div id="toast"></div>
+<script src="photos.js"></script>
+</body></html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f1a12">
+<meta name="color-scheme" content="dark">
+<title>Video Gallery – Peace SMP</title>
+<link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
+<nav><a href="/">← Back to Home</a><a href="photos.html">Photos</a><a href="videos.html">Videos</a></nav>
+<section>
+<h2>Video Gallery</h2>
+<p class="sub">Made a cool build tour, a clutch fight or a funny moment? Share your YouTube video here and everyone can watch it right on this page.</p>
+<div class="center"><button class="btn" id="upBtn">🎬 Upload Your Video</button></div>
+<div class="grid videos-list" id="grid"><div class="empty">Loading videos…</div></div>
+<div class="center"><button class="btn ghost" id="rmBtn">🛠 Admin: Remove Videos</button></div>
+</section>
+<footer>© Peace SMP · play.mcpeace.fun</footer>
+<div class="modal" id="mCode"><div class="box"><h3 id="cT"></h3><p id="cP"></p><input type="password" id="code" placeholder="Code" autocomplete="off"><div class="err" id="cE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="cOk">Continue</button></div></div></div>
+<div class="modal" id="mUp"><div class="box"><h3>Upload video</h3><p>Enter your Minecraft username and paste your YouTube link.</p><input type="text" id="uname" maxlength="16" placeholder="Minecraft username"><input type="text" id="link" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"><div class="err" id="uE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="uOk">Upload</button></div></div></div>
+<div id="toast"></div>
+<script src="videos.js"></script>
+</body></html>
