@@ -9,14 +9,16 @@
   // --- 1. Theme Switcher ---
   const THEME_KEY = 'peace-theme';
   function getPreferredTheme() {
-    const saved = localStorage.getItem(THEME_KEY);
-    if (saved === 'light' || saved === 'dark') return saved;
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch (e) { /* storage blocked: fall back to dark */ }
+    return 'dark'; // dark by default everywhere (incl. Messenger / in-app browsers)
   }
 
-  function applyTheme(theme) {
+  function applyTheme(theme, persist = true) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_KEY, theme);
+    if (persist) { try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* ignore */ } }
     updateToggleButtons(theme);
     window.dispatchEvent(new CustomEvent('peace-theme-change', { detail: { theme } }));
   }
@@ -41,7 +43,7 @@
 
   // Initial theme application
   const currentTheme = getPreferredTheme();
-  applyTheme(currentTheme);
+  applyTheme(currentTheme, false);
 
   document.addEventListener('DOMContentLoaded', () => {
     updateToggleButtons(document.documentElement.getAttribute('data-theme') || currentTheme);
@@ -125,6 +127,8 @@
       document.body.prepend(canvas);
     }
 
+    const root = document.documentElement;
+    if (root.classList.contains('lite')) { canvas.style.display = 'none'; return; } // low-end device: no animation
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -132,6 +136,25 @@
     let particles = [];
     let animId = null;
     let isHidden = false;
+    let last = 0, frames = 0, slow = 0, stopped = false;
+    const sprites = {};
+    function sprite(col) {
+      const key = col.r + ',' + col.g + ',' + col.b;
+      if (sprites[key]) return sprites[key];
+      const s = document.createElement('canvas'); s.width = s.height = 64;
+      const g = s.getContext('2d'), rgb = key;
+      const glow = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+      glow.addColorStop(0, `rgba(${rgb}, 1)`);
+      glow.addColorStop(0.5, `rgba(${rgb}, 0.35)`);
+      glow.addColorStop(1, `rgba(${rgb}, 0)`);
+      g.fillStyle = glow; g.beginPath(); g.arc(32, 32, 32, 0, Math.PI * 2); g.fill();
+      g.fillStyle = `rgb(${rgb})`; g.beginPath(); g.arc(32, 32, 32 * 0.85 / 2.8, 0, Math.PI * 2); g.fill();
+      return (sprites[key] = s);
+    }
+    function stopCanvas() {
+      stopped = true; cancelAnimationFrame(animId);
+      canvas.style.display = 'none'; root.classList.add('lite');
+    }
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const PARTICLE_COUNT = prefersReducedMotion ? 18 : 42;
@@ -204,24 +227,9 @@
         }
       }
       draw(c) {
-        c.save();
+        const r = this.size * 2.8;
         c.globalAlpha = Math.max(0, Math.min(1, this.alpha));
-        // Soft outer glow
-        const glow = c.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2.8);
-        glow.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 1)`);
-        glow.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.35)`);
-        glow.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
-        c.fillStyle = glow;
-        c.beginPath();
-        c.arc(this.x, this.y, this.size * 2.8, 0, Math.PI * 2);
-        c.fill();
-
-        // Bright particle center
-        c.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-        c.beginPath();
-        c.arc(this.x, this.y, this.size * 0.85, 0, Math.PI * 2);
-        c.fill();
-        c.restore();
+        c.drawImage(sprite(this.color), this.x - r, this.y - r, r * 2, r * 2);
       }
     }
 
@@ -229,8 +237,14 @@
       particles.push(new Particle(true));
     }
 
-    function loop() {
-      if (isHidden) return;
+    function loop(ts) {
+      if (isHidden || stopped) return;
+      if (last) {
+        const dt = ts - last; frames++;
+        if (dt > 45) slow++;
+        if (frames === 120 && slow > 40) { stopCanvas(); return; } // struggling device: switch animation off
+      }
+      last = ts;
       ctx.clearRect(0, 0, width, height);
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
@@ -241,7 +255,8 @@
 
     document.addEventListener('visibilitychange', () => {
       isHidden = document.hidden;
-      if (!isHidden) {
+      if (!isHidden && !stopped) {
+        last = 0;
         cancelAnimationFrame(animId);
         animId = requestAnimationFrame(loop);
       }

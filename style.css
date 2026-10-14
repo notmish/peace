@@ -77,6 +77,8 @@
 }
 
 html {
+  background: var(--bg);
+  color-scheme: dark;
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
 }
@@ -1006,5 +1008,21 @@ footer {
 
   .hero-btns .btn {
     width: 100%;
+  }
+}
+
+/* ===== Light theme native controls + low-end / reduced-motion safety ===== */
+html[data-theme="light"] { color-scheme: light; }
+html.lite *, html.lite *::before, html.lite *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+html.lite #ambient-canvas { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

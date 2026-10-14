@@ -4,10 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#09130b">
+  <meta name="color-scheme" content="dark light">
   <script>
     (function() {
-      const saved = localStorage.getItem('peace-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', saved);
+      var t = 'dark', r = document.documentElement;
+      try { var s = localStorage.getItem('peace-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+      r.setAttribute('data-theme', t);
+      try {
+        var c = navigator.connection || {};
+        if (c.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 2)) r.classList.add('lite');
+      } catch (e) {}
     })();
   </script>
   <title>Event Gallery – Peace SMP</title>

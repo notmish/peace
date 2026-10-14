@@ -4,21 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#09130b">
+  <meta name="color-scheme" content="dark light">
   <script>
     (function() {
-      const saved = localStorage.getItem('peace-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', saved);
+      var t = 'dark', r = document.documentElement;
+      try { var s = localStorage.getItem('peace-theme'); if (s === 'light' || s === 'dark') t = s; } catch (e) {}
+      r.setAttribute('data-theme', t);
+      try {
+        var c = navigator.connection || {};
+        if (c.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 2)) r.classList.add('lite');
+      } catch (e) {}
     })();
   </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Peace SMP – Peaceful Minecraft Survival">
   <meta property="og:description" content="A semi-vanilla, pay-to-win-free Minecraft SMP with a peaceful community and no map resets. Join at play.mcpeace.fun">
-  <meta property="og:url" content="https://peace-notmish.vercel.app">
-  <meta property="og:image" content="https://peace-notmish.vercel.app/ogimage.png">
+  <meta property="og:url" content="https://www.mcpeace.fun">
+  <meta property="og:image" content="https://www.mcpeace.fun/ogimage.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://peace-notmish.vercel.app/ogimage.png">
+  <meta name="twitter:image" content="https://www.mcpeace.fun/ogimage.png">
   <title>Peace SMP – Peaceful Minecraft Survival</title>
   <meta name="description" content="Peace SMP: a semi-vanilla, pay-to-win-free Minecraft survival server with a peaceful community and no map resets.">
   <link rel="icon" href="logo.png">
