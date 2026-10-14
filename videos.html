@@ -1,21 +1,103 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0f1a12">
-<meta name="color-scheme" content="dark">
-<title>Video Gallery – Peace SMP</title>
-<link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
-<nav><a href="/">← Back to Home</a><a href="photos.html">Photos</a><a href="videos.html">Videos</a></nav>
-<section>
-<h2>Video Gallery</h2>
-<p class="sub">Made a cool build tour, a clutch fight or a funny moment? Share your YouTube video here and everyone can watch it right on this page.</p>
-<div class="center"><button class="btn" id="upBtn">🎬 Upload Your Video</button></div>
-<div class="grid videos-list" id="grid"><div class="empty">Loading videos…</div></div>
-<div class="center"><button class="btn ghost" id="rmBtn">🛠 Admin: Remove Videos</button></div>
-</section>
-<footer>© Peace SMP · play.mcpeace.fun</footer>
-<div class="modal" id="mCode"><div class="box"><h3 id="cT"></h3><p id="cP"></p><input type="password" id="code" placeholder="Code" autocomplete="off"><div class="err" id="cE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="cOk">Continue</button></div></div></div>
-<div class="modal" id="mUp"><div class="box"><h3>Upload video</h3><p>Enter your Minecraft username and paste your YouTube link.</p><input type="text" id="uname" maxlength="16" placeholder="Minecraft username"><input type="text" id="link" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"><div class="err" id="uE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="uOk">Upload</button></div></div></div>
-<div id="toast"></div>
-<script src="videos.js"></script>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09130b">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('peace-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+  <title>Video Gallery – Peace SMP</title>
+  <link rel="icon" href="logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="ambient-canvas"></canvas>
+
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="logo.png" alt="Peace SMP">
+      <span>Peace SMP</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/">← Back to Home</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="videos.html" style="color:var(--acc);">Videos</a></li>
+      <li><a href="events.html">Events</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" aria-label="Toggle Theme" title="Toggle Theme">
+        <span class="theme-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </span>
+      </button>
+
+      <button class="nav-burger" aria-label="Toggle Navigation" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </nav>
+
+  <section>
+    <h2>Community Video Gallery</h2>
+    <p class="sub">Recorded a base tour, a PvP duel, or a hilarious Minecraft mishap? Paste your YouTube link to showcase it to the entire community!</p>
+
+    <div class="center" style="margin-bottom: 24px;">
+      <button class="btn" id="upBtn">
+        <span>🎬 Share Your Video</span>
+      </button>
+    </div>
+
+    <div class="grid videos-list" id="grid">
+      <div class="empty">Loading videos…</div>
+    </div>
+
+    <div class="center" style="margin-top: 36px;">
+      <button class="btn ghost" id="rmBtn">🛠 Admin: Remove Videos</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© Peace SMP · play.mcpeace.fun</p>
+  </footer>
+
+  <!-- PIN Modal -->
+  <div class="modal" id="mCode">
+    <div class="box">
+      <h3 id="cT"></h3>
+      <p id="cP"></p>
+      <input type="password" id="code" placeholder="Enter security code" autocomplete="off">
+      <div class="err" id="cE"></div>
+      <div class="row">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn" id="cOk">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div class="modal" id="mUp">
+    <div class="box">
+      <h3>Share YouTube Video</h3>
+      <p>Enter your Minecraft username and paste the YouTube video link.</p>
+      <input type="text" id="uname" maxlength="16" placeholder="Minecraft username">
+      <input type="text" id="link" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
+      <div class="err" id="uE"></div>
+      <div class="row">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn" id="uOk">Upload Video</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="theme.js"></script>
+  <script src="videos.js"></script>
+</body>
+</html>

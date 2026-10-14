@@ -1,25 +1,110 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0f1a12">
-<meta name="color-scheme" content="dark">
-<title>Event Gallery – Peace SMP</title>
-<link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
-<nav><a href="/">← Back to Home</a><a href="/#events">Events</a><a href="/#join">Join</a></nav>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09130b">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('peace-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+  <title>Event Gallery – Peace SMP</title>
+  <link rel="icon" href="logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="ambient-canvas"></canvas>
 
-<section>
-<h2>Event Gallery</h2>
-<p class="sub">Relive our best moments. Played in an event? Upload your pictures and add a short note so everyone remembers what happened.</p>
-<div class="center"><button class="btn" id="upBtn">Upload Event Picture</button></div>
-<div class="grid events-list" id="grid"><div class="empty">Loading event records…</div></div>
-<div class="center"><button class="btn ghost" id="rmBtn">Admin: Remove Photos</button></div>
-</section>
+  <nav>
+    <a href="/" class="nav-brand">
+      <img src="logo.png" alt="Peace SMP">
+      <span>Peace SMP</span>
+    </a>
 
-<footer>© Peace SMP · play.mcpeace.fun · Not affiliated with Mojang or Microsoft.</footer>
+    <ul class="nav-links">
+      <li><a href="/">← Back to Home</a></li>
+      <li><a href="/#events">Events</a></li>
+      <li><a href="/#join">Join</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="videos.html">Videos</a></li>
+    </ul>
 
-<div class="modal" id="mCode"><div class="box"><h3 id="cT"></h3><p id="cP"></p><input type="password" id="code" placeholder="Code" autocomplete="off"><div class="err" id="cE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="cOk">Continue</button></div></div></div>
-<div class="modal" id="mUp"><div class="box"><h3>Upload event picture</h3><p>Enter your Minecraft username, a short note and your image.</p><input type="text" id="uname" maxlength="16" placeholder="Minecraft username"><textarea id="note" maxlength="300" placeholder="Note (event name, what happened, who won…)"></textarea><input type="file" id="file" accept="image/*"><div class="err" id="uE"></div><div class="row"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="uOk">Upload</button></div></div></div>
-<div class="modal" id="big"><img id="bigImg" alt=""></div>
-<div id="toast"></div>
-<script src="events.js"></script>
-</body></html>
+    <div class="nav-actions">
+      <button class="theme-toggle" aria-label="Toggle Theme" title="Toggle Theme">
+        <span class="theme-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </span>
+      </button>
+
+      <button class="nav-burger" aria-label="Toggle Navigation" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </nav>
+
+  <section>
+    <h2>Event Gallery</h2>
+    <p class="sub">Relive our greatest server events. Participated in a tournament, boss battle, or celebration? Upload your snapshots with a recap note!</p>
+
+    <div class="center" style="margin-bottom: 24px;">
+      <button class="btn" id="upBtn">
+        <span>🏆 Upload Event Picture</span>
+      </button>
+    </div>
+
+    <div class="grid events-list" id="grid">
+      <div class="empty">Loading event records…</div>
+    </div>
+
+    <div class="center" style="margin-top: 36px;">
+      <button class="btn ghost" id="rmBtn">Admin: Remove Photos</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© Peace SMP · play.mcpeace.fun · Not affiliated with Mojang or Microsoft.</p>
+  </footer>
+
+  <!-- PIN Modal -->
+  <div class="modal" id="mCode">
+    <div class="box">
+      <h3 id="cT"></h3>
+      <p id="cP"></p>
+      <input type="password" id="code" placeholder="Enter security code" autocomplete="off">
+      <div class="err" id="cE"></div>
+      <div class="row">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn" id="cOk">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div class="modal" id="mUp">
+    <div class="box">
+      <h3>Upload Event Picture</h3>
+      <p>Enter your Minecraft username, a short story/note, and select your picture.</p>
+      <input type="text" id="uname" maxlength="16" placeholder="Minecraft username">
+      <textarea id="note" maxlength="300" placeholder="Note (event name, highlights, who won, funny moments…)"></textarea>
+      <input type="file" id="file" accept="image/*">
+      <div class="err" id="uE"></div>
+      <div class="row">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn" id="uOk">Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="modal" id="big">
+    <img id="bigImg" alt="Enlarged view">
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="theme.js"></script>
+  <script src="events.js"></script>
+</body>
+</html>

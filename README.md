@@ -14,4 +14,5 @@ Gallery pictures are committed to the repo's `gallery/` folder through the GitHu
 
 Never commit the token or hashes. PINs are checked only on the server, so they can't be found by inspecting the page.
 ## Credit
-Ashik (Meshur Abba)
+Ashik (Meshur Abba)  
+Redesigned by Siam Khan (Sciencon)
