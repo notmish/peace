@@ -99,19 +99,24 @@
     // --- 4. Live Minecraft Server Status ---
     const statusPill = document.getElementById('serverStatus');
     if (statusPill) {
-      fetch('https://api.mcsrvstat.us/2/play.mcpeace.fun')
-        .then(r => r.json())
+      const setStatus = (online, extra) => {
+        statusPill.innerHTML = `<span class="status-dot ${online ? 'online' : 'offline'}"></span> <b>${online ? 'Server Online' : 'Offline'}</b> · <span>${extra}</span>`;
+      };
+      const showOffline = () => setStatus(false, 'Try the backup IP');
+      const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+      const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 8000); // give up after 8s
+      fetch('https://api.mcsrvstat.us/2/play.mcpeace.fun', ctrl ? { signal: ctrl.signal } : undefined)
+        .then(r => { if (!r.ok) throw new Error('status check failed'); return r.json(); })
         .then(data => {
           if (data && data.online) {
             const players = (data.players && typeof data.players.online === 'number') ? data.players.online : 0;
-            statusPill.innerHTML = `<span class="status-dot online"></span> <b>Server Online</b> · <span class="players-online">${players} Playing</span>`;
+            setStatus(true, `${players} Playing`);
           } else {
-            statusPill.innerHTML = `<span class="status-dot online"></span> <b>Server Online</b> · <span>Java & Bedrock</span>`;
+            showOffline();
           }
         })
-        .catch(() => {
-          statusPill.innerHTML = `<span class="status-dot online"></span> <b>Server Online</b> · <span>Java & Bedrock</span>`;
-        });
+        .catch(showOffline)
+        .finally(() => clearTimeout(timer));
     }
 
     // --- 5. Ambient Minecraft Particle Canvas ---

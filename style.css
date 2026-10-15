@@ -349,9 +349,18 @@ h2 {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  background: #94a3b8; /* grey while checking */
+  position: relative;
+}
+
+.status-dot.online {
   background: #22c55e;
   box-shadow: 0 0 10px #22c55e;
-  position: relative;
+}
+
+.status-dot.offline {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
 }
 
 .status-dot.online::after {
