@@ -99,24 +99,27 @@
     // --- 4. Live Minecraft Server Status ---
     const statusPill = document.getElementById('serverStatus');
     if (statusPill) {
-      const setStatus = (online, extra) => {
-        statusPill.innerHTML = `<span class="status-dot ${online ? 'online' : 'offline'}"></span> <b>${online ? 'Server Online' : 'Offline'}</b> · <span>${extra}</span>`;
+      const render = (cls, label, extra) => {
+        statusPill.innerHTML = `<span class="status-dot ${cls}"></span> <b>${label}</b> · <span>${extra}</span>`;
       };
-      const showOffline = () => setStatus(false, 'Try the backup IP');
-      const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-      const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 8000); // give up after 8s
-      fetch('https://api.mcsrvstat.us/2/play.mcpeace.fun', ctrl ? { signal: ctrl.signal } : undefined)
-        .then(r => { if (!r.ok) throw new Error('status check failed'); return r.json(); })
-        .then(data => {
-          if (data && data.online) {
-            const players = (data.players && typeof data.players.online === 'number') ? data.players.online : 0;
-            setStatus(true, `${players} Playing`);
-          } else {
-            showOffline();
-          }
-        })
-        .catch(showOffline)
-        .finally(() => clearTimeout(timer));
+      // Checks one Java address. Any failure or timeout counts as "down".
+      const check = addr => {
+        const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+        const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 8000);
+        return fetch('https://api.mcsrvstat.us/2/' + addr, ctrl ? { signal: ctrl.signal } : undefined)
+          .then(r => { if (!r.ok) throw new Error('status check failed'); return r.json(); })
+          .then(d => ({
+            online: !!(d && d.online),
+            players: (d && d.players && typeof d.players.online === 'number') ? d.players.online : 0
+          }))
+          .catch(() => ({ online: false, players: 0 }))
+          .finally(() => clearTimeout(timer));
+      };
+      Promise.all([check('play.mcpeace.fun'), check('node-2.banglaverse.net:25668')]).then(([main, backup]) => {
+        if (main.online) render('online', 'Server Online', `${main.players} Playing`);
+        else if (backup.online) render('warn', 'Server Online', 'Main IP down, use the backup IP');
+        else render('offline', 'Offline', 'Both Java IPs unreachable');
+      });
     }
 
     // --- 5. Ambient Minecraft Particle Canvas ---
