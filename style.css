@@ -358,11 +358,6 @@ h2 {
   box-shadow: 0 0 10px #22c55e;
 }
 
-.status-dot.warn {
-  background: #f59e0b;
-  box-shadow: 0 0 10px #f59e0b;
-}
-
 .status-dot.offline {
   background: #ef4444;
   box-shadow: 0 0 10px #ef4444;
