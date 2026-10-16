@@ -1,6 +1,7 @@
 # Peace SMP website
 
-Static site (`index.html`, `style.css`, `script.js`) + Python serverless API (`api/`) for Vercel.
+Static site (`index.html`, `style.css`, `theme.js`, `script.js`, gallery pages) + Python serverless API (`api/`) for Vercel.
+The server-status badge calls `api/status.py`, which checks both Java IPs through mcsrvstat.us (no setup needed).
 Gallery pictures are committed to the repo's `gallery/` folder through the GitHub API.
 
 ## Setup
@@ -13,6 +14,7 @@ Gallery pictures are committed to the repo's `gallery/` folder through the GitHu
 5. Deploy. Every upload/removal makes a commit, which also triggers a redeploy (that's normal).
 
 Never commit the token or hashes. PINs are checked only on the server, so they can't be found by inspecting the page.
+
 ## Credit
-Ashik (Meshur Abba)  
+Meshkat
 Redesigned by Siam Khan (Sciencon)

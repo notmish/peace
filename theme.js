@@ -99,23 +99,22 @@
     // --- 4. Live Minecraft Server Status ---
     const statusPill = document.getElementById('serverStatus');
     if (statusPill) {
-      const setStatus = (online, extra) => {
-        statusPill.innerHTML = `<span class="status-dot ${online ? 'online' : 'offline'}"></span> <b>${online ? 'Server Online' : 'Offline'}</b> · <span>${extra}</span>`;
+      const render = (cls, label, extra) => {
+        statusPill.innerHTML = `<span class="status-dot ${cls}"></span> <b>${label}</b> · <span>${extra}</span>`;
       };
-      const showOffline = () => setStatus(false, 'Try the backup IP');
+      const unavailable = () => render('', 'Status unavailable', 'Use the IPs below');
       const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-      const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 8000); // give up after 8s
-      fetch('https://api.mcsrvstat.us/2/play.mcpeace.fun', ctrl ? { signal: ctrl.signal } : undefined)
-        .then(r => { if (!r.ok) throw new Error('status check failed'); return r.json(); })
-        .then(data => {
-          if (data && data.online) {
-            const players = (data.players && typeof data.players.online === 'number') ? data.players.online : 0;
-            setStatus(true, `${players} Playing`);
-          } else {
-            showOffline();
-          }
+      const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 10000);
+      // /api/status checks both Java IPs on the server (see api/status.py)
+      fetch('/api/status', ctrl ? { signal: ctrl.signal } : undefined)
+        .then(r => { if (!r.ok) throw new Error('status unavailable'); return r.json(); })
+        .then(({ main, backup }) => {
+          if (main && main.online) render('online', 'Server Online', `${main.players} Playing`);
+          else if (backup && backup.online) render('warn', 'Server Online', 'Main IP down, use the backup IP');
+          else if (main && backup) render('offline', 'Offline', 'Both Java IPs are down');
+          else unavailable(); // the check itself failed: don't claim "Offline"
         })
-        .catch(showOffline)
+        .catch(unavailable)
         .finally(() => clearTimeout(timer));
     }
 

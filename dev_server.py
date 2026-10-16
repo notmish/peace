@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Local development server for Peace SMP website.
-Serves static assets and provides local mock endpoints for /api/gallery, /api/events, and /api/videos
+Serves static assets and provides local mock endpoints for /api/gallery, /api/events, /api/videos and /api/status
 using local repository folders.
 """
 import http.server
@@ -24,6 +24,8 @@ class PeaceDevHandler(http.server.SimpleHTTPRequestHandler):
             return self.serve_events()
         elif self.path.startswith("/api/videos"):
             return self.serve_videos()
+        elif self.path.startswith("/api/status"):
+            return self.send_json({"main": {"online": True, "players": 0}, "backup": {"online": True, "players": 0}})  # mock
         return super().do_GET()
 
     def send_json(self, data, code=200):
@@ -90,7 +92,7 @@ class PeaceDevHandler(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), PeaceDevHandler) as httpd:
+    with socketserver.TCPServer(("127.0.0.1", PORT), PeaceDevHandler) as httpd:
         print(f"Peace SMP Local Dev Server running at http://localhost:{PORT}")
         try:
             httpd.serve_forever()
