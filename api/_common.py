@@ -1,5 +1,5 @@
 """Shared helpers for the Peace SMP serverless API (Vercel Python runtime)."""
-import os, json, hmac, hashlib, base64, time, re
+import os, json, hmac, hashlib, time, re
 import urllib.request, urllib.error
 from http.server import BaseHTTPRequestHandler
 
@@ -62,11 +62,11 @@ def github(method: str, path: str, payload=None):
 
 
 class Base(BaseHTTPRequestHandler):
-    def reply(self, code: int, data):
+    def reply(self, code: int, data, cache: str = "no-store"):
         body = json.dumps(data).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Cache-Control", "no-store")
+        self.send_header("Cache-Control", cache)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
