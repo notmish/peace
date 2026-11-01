@@ -10,7 +10,7 @@ try:
 except ImportError:
     from api._common import Base
 
-TARGETS = {"main": "play.mcpeace.fun", "backup": "node-2.banglaverse.net:25668"}
+TARGETS = {"main": "play.mcpeace.fun", "backup": "node-2.banglaverse.net:6617"}
 UA = "PeaceSMP-StatusCheck/1.0 (+https://www.mcpeace.fun)"
 
 
